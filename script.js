@@ -1,11 +1,8 @@
 let show_instructions = false;
+let started = false;
+let interval = null;
 
-/*
-function sleep(ms) 
-{
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-function getRandomColor() 
+function changeColor() 
 {
     var letters = '0123456789ABCDEF';
     var color = '#';
@@ -13,18 +10,16 @@ function getRandomColor()
     {
         color += letters[Math.floor(Math.random() * 16)];
     }
-    return color;
+    
+    $("#game-text").css("color", color)
 }
 
-$(document).ready(function()
+
+
+$(document).ready(function() 
 {
-    while(true)
-    {
-        await sleep(1000)
-        $("#game-instruction-text").css("color", getRandomColor())
-    }
+    interval = setInterval(changeColor, 1000)
 })
-*/
 
 let instructions = function()
 {

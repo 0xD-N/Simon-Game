@@ -58,6 +58,7 @@ td
     position: relative;
     font-size: 0em;
     font-style: italic;
+    color: rgb(184, 176, 176);
 }
 
 #game-text
@@ -68,6 +69,16 @@ td
     top: 10vh;
     height: fit-content;
     width: fit-content;
+}
+
+#game-div
+{
+    
+    max-height: fit-content;
+    max-width: fit-content;
+    position: relative;
+    top: 16vh;
+    
 }
 
 #bird
@@ -107,16 +118,4 @@ td
 #game-table
 {
     position: relative;
-}
-
-
-
-#game-div
-{
-    
-    max-height: fit-content;
-    max-width: fit-content;
-    position: relative;
-    top: 12vh;
-    
 }
