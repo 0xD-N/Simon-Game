@@ -1,8 +1,8 @@
 let show_instructions = false;
 let started = false;
-let interval = null;
+let gameTextInterval = null;
 
-function changeColor() 
+function getRandomColor() 
 {
     var letters = '0123456789ABCDEF';
     var color = '#';
@@ -10,16 +10,22 @@ function changeColor()
     {
         color += letters[Math.floor(Math.random() * 16)];
     }
-    
-    $("#game-text").css("color", color)
+
+    return color
+}
+
+function rainbowGameText() 
+{
+    $("#game-text").css("color", getRandomColor())
 }
 
 
 
 $(document).ready(function() 
 {
-    interval = setInterval(changeColor, 1000)
+    gameTextInterval = setInterval(rainbowGameText, 1000)
 })
+
 
 let instructions = function()
 {
