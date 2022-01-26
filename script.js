@@ -1,5 +1,4 @@
 let show_instructions = false;
-let started = false;
 let gameTextInterval = null;
 let levelInterval = null;
 let run = false;
@@ -57,12 +56,16 @@ let addSequence = function()
 {
     computer_sequence.push(Number(1 + Math.random() * 3).toFixed(0))
 }
-
-let playSequence = function()
+let playSequence = async function()
 {
     for(let i = 0; i < computer_sequence.length; i++)
     {
-        alert(Number(computer_sequence[i]).toFixed(0))
+        let name = animals[computer_sequence[i] - 1]
+        $(`#${name}`).animate({opacity: 0.4}, 700, function()
+        {
+            $(this).css("opacity", "1")
+        })
+       
     }
 }
 
@@ -87,8 +90,9 @@ let logic = function(num)
 
         if(!checkSequence())
         {
-            $("#game-text").text("GAME OVER!")
             clearInterval(gameTextInterval)
+            $("#game-text").text("GAME OVER!")
+            $("#game-text").css("color", "rgb(255,0,0)")
             run = false;
         }
         else
@@ -124,18 +128,34 @@ $(document).ready(function()
     
     $("#bird").click(function()
     {
+        $(this).animate({opacity: 0.4}, 700, function()
+        {
+            $(this).css("opacity", "1")
+        })
         logic(1)
     });
     $("#dog").click(function()
     {
+        $(this).animate({opacity: 0.4}, 700, function()
+        {
+            $(this).css("opacity", "1")
+        })
         logic(2);
     });
     $("#lion").click(function()
     {
+        $(this).animate({opacity: 0.4}, 700, function()
+        {
+            $(this).css("opacity", "1")
+        })
         logic(3);
     });
     $("#monkey").click(function()
     {
+        $(this).animate({opacity: 0.4}, 700, function()
+        {
+            $(this).css("opacity", "1")
+        })
         logic(4)
     })
 })
