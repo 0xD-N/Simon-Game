@@ -1,15 +1,33 @@
+//controls if instructions show
 let show_instructions = false;
+
+//controls the game title text color loop
 let gameTextInterval = null;
+
+//controls loop in control of current level
 let levelInterval = null;
+
+//controls if the game runs
 let run = false;
+
+let gameWasRan = false;
+
+//holds computer sequence
 let computer_sequence = [];
+
+//holds user sequence
 let user_sequence = [];
-let i = 0;
+
+//holds level 
 let level = 1;
 
+//holds animation speed
+let speed = 1000
+
+//holds list of animal names corresponding with design
 let animals = ["bird", "dog", "lion", "monkey"]
 
-
+//generates a random hex color for title
 function getRandomColor() 
 {
     var letters = '0123456789ABCDEF';
@@ -22,11 +40,13 @@ function getRandomColor()
     return color
 }
 
+//changes game text color to a random color
 function rainbowGameText() 
 {
     $("#game-text").css("color", getRandomColor())
 }
 
+//controls instructions
 let instructions = function()
 {
     if(show_instructions)
@@ -41,6 +61,17 @@ let instructions = function()
     }
 }
 
+
+//chenges game text to corresponding level
+let setLevel = function()
+{
+    if(run)
+    {
+        $("#game-text").text(`Level ${level}`)
+    }
+}
+
+//checks if user sequence matches computers
 let checkSequence = function()
 {
     let equal = true
@@ -52,29 +83,55 @@ let checkSequence = function()
     return equal
 }
 
+//adds random animal to computer sequence
 let addSequence = function()
 {
     computer_sequence.push(Number(1 + Math.random() * 3).toFixed(0))
 }
-let playSequence = async function()
+
+//displays the computer sequence to the user
+let playSequence = async function(j = 0)
 {
-    for(let i = 0; i < computer_sequence.length; i++)
+    if(j == computer_sequence.length)
     {
-        let name = animals[computer_sequence[i] - 1]
-        $(`#${name}`).animate({opacity: 0.4}, 700, function()
+        return
+    }
+    else
+    {
+        let animal = animals[computer_sequence[j] - 1]
+        let animalAudio = new Audio(`sounds/${animal}.mp3`)
+        animalAudio.play()
+        $(`#${animal}`).animate({opacity: 0.4}, speed, function()
         {
             $(this).css("opacity", "1")
+            animalAudio.pause()
+            playSequence(j + 1)
         })
-       
     }
 }
 
+//initializes the game after start button is pressed. 
+
+//start button gets hidden
+
+//game text is set to the current level
+
+//run is set to true
+
+//animal is added to computer sequence
+
+//plays the sequence to get the user started 
 let begin = function()
 {
     $("#start").hide()
-
     $("#game-text").text(`Level ${level}`)
-    
+    if(gameWasRan)
+    {
+        gameTextInterval = setInterval(rainbowGameText, 1000)
+    }
+    computer_sequence = []
+    user_sequence = []
+
     run=true
 
     addSequence()
@@ -82,26 +139,50 @@ let begin = function()
     playSequence()
 }
 
+//controls game logic
 let logic = function(num)
 {
     if(run)
     {
+        //if button is clicked its associated number is passed as num
+
+        //number is pushed to user_sequence
         user_sequence.push(num)
 
+        //if the sequence doesn't match the computers
         if(!checkSequence())
         {
+            //stops game rainbow text
             clearInterval(gameTextInterval)
+            
+            //changes game text to game over
             $("#game-text").text("GAME OVER!")
+
+            //changes game text color to red
             $("#game-text").css("color", "rgb(255,0,0)")
+
+            $("#start").text("Restart")
+            $("#start").css("width", "fit-content")
+            $("#start").show()
+
+            //game can no longer run
             run = false;
+            level = 1;
+            gameWasRan = true
         }
+        //if it does match the computers
         else
         {
+            //if the length of the user sequence matches the computer's, clear the user's and add a new animal element
             if(user_sequence.length == computer_sequence.length)
             {
                 user_sequence = []
                 addSequence()
+
+                //new level 
                 level += 1
+
+                //plays new computer sequence
                 playSequence()
             }
         }
@@ -109,55 +190,81 @@ let logic = function(num)
     
 }
 
-let setLevel = function()
-{
-    if(run)
-    {
-        $("#game-text").text(`Level ${level}`)
-    }
-}
-
+//when document loads set interval variables and add events for each image and start button
 $(document).ready(function() 
 {
     gameTextInterval = setInterval(rainbowGameText, 1000)
     levelInterval = setInterval(setLevel, 1000)
     $("#start").click(function() 
     {
+        //if start button clicked, this function is called
         begin()
     })
     
     $("#bird").click(function()
     {
-        $(this).animate({opacity: 0.4}, 700, function()
+        if(run)
         {
-            $(this).css("opacity", "1")
-        })
-        logic(1)
-    });
+            //plays animal audio when clicked and then animates it, and finally goes into the logic (brains of program)
+            let animal = animals[1 - 1]
+            let animalAudio = new Audio(`sounds/${animal}.mp3`)
+            animalAudio.play()
+            $(this).animate({opacity: 0.4}, speed, function()
+            {
+                $(this).css("opacity", "1")
+                animalAudio.pause()
+                logic(1)
+            })
+        }
+    });   
     $("#dog").click(function()
     {
-        $(this).animate({opacity: 0.4}, 700, function()
+        if(run)
         {
-            $(this).css("opacity", "1")
-        })
-        logic(2);
+            //plays animal audio when clicked and then animates it, and finally goes into the logic (brains of program)
+            let animal = animals[2 - 1]
+            let animalAudio = new Audio(`sounds/${animal}.mp3`)
+            animalAudio.play()
+            $(this).animate({opacity: 0.4}, speed, function()
+            {
+                $(this).css("opacity", "1")
+                animalAudio.pause()
+                logic(2);
+            }) 
+        }
     });
+
     $("#lion").click(function()
     {
-        $(this).animate({opacity: 0.4}, 700, function()
+        if(run)
         {
-            $(this).css("opacity", "1")
-        })
-        logic(3);
+            //plays animal audio when clicked and then animates it, and finally goes into the logic (brains of program)
+            let animal = animals[3 - 1]
+            let animalAudio = new Audio(`sounds/${animal}.mp3`)
+            animalAudio.play()
+            $(this).animate({opacity: 0.4}, speed, function()
+            {
+                $(this).css("opacity", "1")
+                animalAudio.pause()
+                logic(3);
+            })
+        }
     });
     $("#monkey").click(function()
     {
-        $(this).animate({opacity: 0.4}, 700, function()
+        if(run)
         {
-            $(this).css("opacity", "1")
-        })
-        logic(4)
+            //plays animal audio when clicked and then animates it, and finally goes into the logic (brains of program)
+            let animal = animals[4 - 1]
+            let animalAudio = new Audio(`sounds/${animal}.mp3`)
+            animalAudio.play()
+            $(this).animate({opacity: 0.4}, speed, function()
+            {
+                $(this).css("opacity", "1")
+                animalAudio.pause()
+                logic(4)
+            })
+        }
     })
 })
-
 
