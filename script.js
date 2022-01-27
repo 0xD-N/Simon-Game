@@ -137,6 +137,7 @@ let begin = function()
     addSequence()
 
     playSequence()
+
 }
 
 //controls game logic
@@ -194,7 +195,7 @@ let logic = function(num)
 $(document).ready(function() 
 {
     gameTextInterval = setInterval(rainbowGameText, 1000)
-    levelInterval = setInterval(setLevel, 1000)
+    levelInterval = setInterval(setLevel, 500)
     $("#start").click(function() 
     {
         //if start button clicked, this function is called
@@ -266,5 +267,7 @@ $(document).ready(function()
             })
         }
     })
+
+    $("img").addClass("unselectable")
 })
 

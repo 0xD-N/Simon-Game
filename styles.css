@@ -147,3 +147,12 @@ td
     box-shadow: 0 5px #666;
     transform: translateY(10px);
 }
+
+.unselectable {
+
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
