@@ -10,8 +10,6 @@ let levelInterval = null;
 //controls if the game runs
 let run = false;
 
-let gameWasRan = false;
-
 //holds computer sequence
 let computer_sequence = [];
 
@@ -22,7 +20,10 @@ let user_sequence = [];
 let level = 1;
 
 //holds animation speed
-let speed = 1000
+let speed = 800
+
+//controls whether speed increases
+let wasIncreased = false
 
 //holds list of animal names corresponding with design
 let animals = ["bird", "dog", "lion", "monkey"]
@@ -125,10 +126,11 @@ let begin = function()
 {
     $("#start").hide()
     $("#game-text").text(`Level ${level}`)
-    if(gameWasRan)
-    {
-        gameTextInterval = setInterval(rainbowGameText, 1000)
-    }
+
+    gameTextInterval = setInterval(rainbowGameText, 1000)
+    levelInterval = setInterval(setLevel, 500)
+    levelSpeedInterval = setInterval(increaseSpeed, 500)
+
     computer_sequence = []
     user_sequence = []
 
@@ -138,6 +140,22 @@ let begin = function()
 
     playSequence()
 
+}
+
+//increases speed every 3 rounds
+let increaseSpeed = function()
+{
+    if(level % 2 == 0)
+    {
+        if(wasIncreased == false)
+        {
+            speed -= 75
+            wasIncreased = true
+        }
+
+    }
+    else
+        wasIncreased = false
 }
 
 //controls game logic
@@ -155,6 +173,8 @@ let logic = function(num)
         {
             //stops game rainbow text
             clearInterval(gameTextInterval)
+            clearInterval(levelSpeedInterval)
+            clearInterval(levelInterval)
             
             //changes game text to game over
             $("#game-text").text("GAME OVER!")
@@ -169,7 +189,11 @@ let logic = function(num)
             //game can no longer run
             run = false;
             level = 1;
+            speed = 800;
             gameWasRan = true
+
+            let Aud = new Audio("sounds/game-over.wav")
+            Aud.play()
         }
         //if it does match the computers
         else
@@ -184,7 +208,7 @@ let logic = function(num)
                 level += 1
 
                 //plays new computer sequence
-                playSequence()
+                setTimeout(playSequence, 1000)
             }
         }
     }
@@ -195,7 +219,7 @@ let logic = function(num)
 $(document).ready(function() 
 {
     gameTextInterval = setInterval(rainbowGameText, 1000)
-    levelInterval = setInterval(setLevel, 500)
+
     $("#start").click(function() 
     {
         //if start button clicked, this function is called
