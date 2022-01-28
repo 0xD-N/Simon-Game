@@ -20,7 +20,7 @@ let user_sequence = [];
 let level = 1;
 
 //holds animation speed
-let speed = 800
+let speed = 600
 
 //controls whether speed increases
 let wasIncreased = false
@@ -149,7 +149,7 @@ let increaseSpeed = function()
     {
         if(wasIncreased == false)
         {
-            speed -= 75
+            speed -= 40
             wasIncreased = true
         }
 
