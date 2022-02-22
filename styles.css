@@ -156,3 +156,94 @@ td
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
+#leaderboard
+{
+    border: 2px solid white;
+    color:white;
+    position: absolute;
+    right: 7%;
+    top: 30%;
+}
+
+#leaderboard td
+{
+    border: 2px solid white;
+    font-size: 2em;
+}
+
+#leaderboard th
+{
+    font-size: 2em;
+}
+
+#quit
+{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: fit-content;
+    height:5vw;
+    font-size: 4em;
+    font-family: Arcade;
+    color:red;
+    background-color:black;
+}
+
+/*Pregame section*/
+
+#pregame-information
+{
+    color: black;
+    position: relative;
+    top: 30vh;
+}
+
+#pregame-text
+{
+    font-family: Arcade;
+    font-size: 4em;
+}
+
+#pregame-input
+{
+    display: block;
+    width: fit-content;
+    height: 5vh;
+    font-size: 3em;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    position: relative;
+    top:12vh;
+}
+
+
+#pregame-next
+{
+    padding: 15px 25px;
+    width: 12vw;
+    height: 10vh;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: black;
+    background-color: grey;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    font-family: Arcade;
+    position: relative;
+    top: 23vh;
+}
+
+#pregane-next:hover
+{
+    background-color: #3e8e41;
+}
+
+#pregame-next:active 
+{
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(10px);
+}

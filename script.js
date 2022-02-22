@@ -7,6 +7,9 @@ let gameTextInterval = null;
 //controls loop in control of current level
 let levelInterval = null;
 
+//pregame interval
+let pregameTextInterval = null;
+
 //controls if the game runs
 let run = false;
 
@@ -20,13 +23,19 @@ let user_sequence = [];
 let level = 1;
 
 //holds animation speed
-let speed = 600
+let speed = 700
 
 //controls whether speed increases
 let wasIncreased = false
 
 //holds list of animal names corresponding with design
 let animals = ["bird", "dog", "lion", "monkey"]
+
+//leaderboard 
+
+let leaderboard = null
+
+
 
 //generates a random hex color for title
 function getRandomColor() 
@@ -39,6 +48,11 @@ function getRandomColor()
     }
 
     return color
+}
+
+function pregameRainbowText()
+{
+    $("#pregame-text").css("color", getRandomColor())
 }
 
 //changes game text color to a random color
@@ -125,6 +139,7 @@ let playSequence = async function(j = 0)
 let begin = function()
 {
     $("#start").hide()
+    $("#quit").hide()
     $("#game-text").text(`Level ${level}`)
 
     gameTextInterval = setInterval(rainbowGameText, 1000)
@@ -149,7 +164,7 @@ let increaseSpeed = function()
     {
         if(wasIncreased == false)
         {
-            speed -= 40
+            speed -= 30
             wasIncreased = true
         }
 
@@ -175,6 +190,7 @@ let logic = function(num)
             clearInterval(gameTextInterval)
             clearInterval(levelSpeedInterval)
             clearInterval(levelInterval)
+            leaderboardManager()
             
             //changes game text to game over
             $("#game-text").text("GAME OVER!")
@@ -185,6 +201,7 @@ let logic = function(num)
             $("#start").text("Restart")
             $("#start").css("width", "fit-content")
             $("#start").show()
+            $("#quit").show()
 
             //game can no longer run
             run = false;
@@ -215,10 +232,135 @@ let logic = function(num)
     
 }
 
+//going to initialize the leaderboard when document loads
+let initLeaderboard = function()
+{
+    for(let i = 0; i < localStorage.length; i++)
+    {
+        alert(`${localStorage.key(i)} ${localStorage.getItem(localStorage.key(i))}`)
+    }
+}
+
+//called when game is over,
+
+let leaderboardManager = function()
+{
+    let str = localStorage.getItem("name") + " " + level
+
+    let jsonData = JSON.stringify(str)
+
+    if(localStorage.getItem("leaderboard") == null)
+    {
+        //iniitalize leaderboard
+        localStorage.setItem("leaderboard", JSON.stringify(str))
+    }
+    else
+    {
+        let info = String(JSON.parse(localStorage.getItem("leaderboard"))).split(",")
+
+        //if name in localstorage is in leaderboard
+        if(getNameIndex(info) != -1)
+        {
+            let data = info[getNameIndex(info)].split(" ")
+
+            if(level > Number(data[1]))
+                data[1] = level
+            
+            info[getNameIndex(info)] = data.join(" ")
+        }
+        else
+        {
+            info.push(str)
+        }
+        
+        let output = sortLeaderboard(info)
+
+        localStorage.setItem("leaderboard", JSON.stringify(output))
+    }
+}
+
+let getNameIndex = function(arr)
+{
+    let index = -1
+
+    for(let i = 0; i < arr.length; i++)
+    {
+        if(arr[i].split(" ")[0] == localStorage.getItem("name"))
+        {
+            index = i
+        }
+    }
+
+    return index
+}
+
+let sortLeaderboard = function(arr)
+{
+    output = [...arr]
+
+    for(let i = 0; i < output.length; i++)
+    {
+
+        let currentPlayerLevel = output[i].split(" ")[1]
+
+        for(let j = i + 1; j < output.length; j++)
+        {
+            let nextPlayerLevel = output[j].split(" ")[1]
+
+            if(Number(nextPlayerLevel) > Number(currentPlayerLevel))
+            {
+                let temp = output[i]
+                output[i] = output[j]
+                output[j] = temp
+            }
+        }
+        
+
+    }
+
+    return output
+}
+
+let testLeaderboard = function()
+{
+    leaderboard = document.getElementById("leaderboard")
+
+    
+    //start at index 1 since heading is in 0
+    for(let i = 1; i <= 3; i++)
+    {
+        let row = leaderboard.insertRow(i)
+
+        //columns of leaderboard
+        for(let j = 0; j < 2; j++)
+        {
+            let cell = row.insertCell(j)
+
+            $(cell).text(`Test ${i}`)
+        }
+    }
+    
+}
+
 //when document loads set interval variables and add events for each image and start button
 $(document).ready(function() 
 {
+    pregameTextInterval = setInterval(pregameRainbowText, 1000)
     gameTextInterval = setInterval(rainbowGameText, 1000)
+
+    $("#pregame-next").click(function() 
+    {
+        let inputVal = $("#pregame-input")[0].value
+
+        if(inputVal.length == 0)
+            alert("Enter a valid username.")
+        else
+        {
+            clearInterval(pregameTextInterval)
+            localStorage.setItem("name", $("#pregame-input")[0].value)
+            window.location.replace("index.html")
+        }
+    })
 
     $("#start").click(function() 
     {
@@ -290,6 +432,11 @@ $(document).ready(function()
                 logic(4)
             })
         }
+    })
+
+    $("#quit").click(function() 
+    {
+        window.location.replace("pregame.html")
     })
 
     $("img").addClass("unselectable")
