@@ -216,6 +216,14 @@ td
     top:12vh;
 }
 
+#pregame-error
+{
+    position:absolute;
+    top:27vh;
+    left: 35.8vw;
+    font-size:1.5em;
+    color: red;
+}
 
 #pregame-next
 {

@@ -386,9 +386,11 @@ $(document).ready(function()
     $("#pregame-next").click(function() 
     {
         let inputVal = $("#pregame-input")[0].value
-
+        
         if(inputVal.length == 0)
-            alert("Enter a valid username.")
+            $("#pregame-error").text("Enter a valid username")
+        else if(inputVal.includes(" "))
+            $("#pregame-error").text("Username must include no spaces")
         else
         {
             clearInterval(pregameTextInterval)
@@ -400,7 +402,7 @@ $(document).ready(function()
     $("#start").click(function() 
     {
         //if start button clicked, this function is called
-        begin()
+        setTimeout(begin, 500)
     })
     
     $("#bird").click(function()
