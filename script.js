@@ -1,6 +1,8 @@
 //controls if instructions show
 let show_instructions = false;
 
+let show_leaderboard = false;
+
 //controls the game title text color loop
 let gameTextInterval = null;
 
@@ -34,8 +36,6 @@ let animals = ["bird", "dog", "lion", "monkey"]
 //leaderboard 
 
 let leaderboard = null
-
-
 
 //generates a random hex color for title
 function getRandomColor() 
@@ -72,6 +72,20 @@ let instructions = function()
     else
     {
         $("#game-instruction-text").css("font-size", "2em")
+        show_instructions = true
+    }
+}
+
+let leaderboard_visibility = function()
+{
+    if(show_leaderboard)
+    {
+        $("#leaderboard").hide()
+        show_instructions = false
+    }
+    else
+    {
+        $("#leaderboard").show()
         show_instructions = true
     }
 }
@@ -157,14 +171,14 @@ let begin = function()
 
 }
 
-//increases speed every 3 rounds
+//increases speed every 2 rounds
 let increaseSpeed = function()
 {
     if(level % 2 == 0)
     {
         if(wasIncreased == false)
         {
-            speed -= 30
+            speed -= 20
             wasIncreased = true
         }
 
@@ -191,6 +205,7 @@ let logic = function(num)
             clearInterval(levelSpeedInterval)
             clearInterval(levelInterval)
             leaderboardManager()
+            initLeaderboard()
             
             //changes game text to game over
             $("#game-text").text("GAME OVER!")
@@ -232,22 +247,14 @@ let logic = function(num)
     
 }
 
-//going to initialize the leaderboard when document loads
-let initLeaderboard = function()
-{
-    for(let i = 0; i < localStorage.length; i++)
-    {
-        alert(`${localStorage.key(i)} ${localStorage.getItem(localStorage.key(i))}`)
-    }
-}
+
 
 //called when game is over,
 
 let leaderboardManager = function()
 {
     let str = localStorage.getItem("name") + " " + level
-
-    let jsonData = JSON.stringify(str)
+    let output = null
 
     if(localStorage.getItem("leaderboard") == null)
     {
@@ -273,9 +280,12 @@ let leaderboardManager = function()
             info.push(str)
         }
         
-        let output = sortLeaderboard(info)
+
+        output = sortLeaderboard(info)
 
         localStorage.setItem("leaderboard", JSON.stringify(output))
+
+        
     }
 }
 
@@ -321,23 +331,44 @@ let sortLeaderboard = function(arr)
     return output
 }
 
-let testLeaderboard = function()
+//going to initialize the leaderboard when document loads
+let initLeaderboard = function()
 {
-    leaderboard = document.getElementById("leaderboard")
+   
+    let path = window.location.pathname;
+    let page = path.split("/").pop();
 
-    
-    //start at index 1 since heading is in 0
-    for(let i = 1; i <= 3; i++)
+    if(page != "index.html")
+        return
+    else
     {
-        let row = leaderboard.insertRow(i)
+        let leaderboard = document.getElementById("leaderboard") 
+        
+        let leaderboardData = String(JSON.parse(localStorage.getItem("leaderboard"))).split(",")
 
-        //columns of leaderboard
-        for(let j = 0; j < 2; j++)
-        {
-            let cell = row.insertCell(j)
+        while(leaderboard.rows.length > 1 && leaderboard.rows.length != 0)
+            leaderboard.deleteRow(-1)
+        
+        //start at index 1 since heading is in 0
+        for(let i = 1; i < leaderboardData.length + 1; i++)
+        { 
 
-            $(cell).text(`Test ${i}`)
+            if(i == 5) break;
+
+            let row = leaderboard.insertRow(i)
+
+            //columns of leaderboard
+            for(let j = 0; j < 2; j++)
+            {
+                let cell = row.insertCell(j)
+
+                if(j == 0)
+                    $(cell).text(leaderboardData[i - 1].split(" ")[0])
+                else if(j == 1)
+                    $(cell).text(leaderboardData[i - 1].split(" ")[1])
+            }
         }
+
     }
     
 }
@@ -348,6 +379,10 @@ $(document).ready(function()
     pregameTextInterval = setInterval(pregameRainbowText, 1000)
     gameTextInterval = setInterval(rainbowGameText, 1000)
 
+    if(localStorage.getItem("leaderboard") != null)
+        initLeaderboard()
+
+    
     $("#pregame-next").click(function() 
     {
         let inputVal = $("#pregame-input")[0].value
@@ -384,6 +419,7 @@ $(document).ready(function()
             })
         }
     });   
+
     $("#dog").click(function()
     {
         if(run)
@@ -417,6 +453,7 @@ $(document).ready(function()
             })
         }
     });
+
     $("#monkey").click(function()
     {
         if(run)

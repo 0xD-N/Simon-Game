@@ -180,7 +180,7 @@ td
 #quit
 {
     position: absolute;
-    right: 0;
+    right: 1vw;
     top: 0;
     width: fit-content;
     height:5vw;
