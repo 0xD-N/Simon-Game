@@ -249,23 +249,30 @@ let logic = function(num)
 
 
 
-//called when game is over,
+//called when game is over. Manages the order of the leaderboard
 
 let leaderboardManager = function()
 {
+    //get username and current level
     let str = localStorage.getItem("name") + " " + level
+
     let output = null
 
+    //if no leaderboard key exists then make a new leaderboard key and give it the value of str
     if(localStorage.getItem("leaderboard") == null)
     {
         //iniitalize leaderboard
+        
+        //json is used to convert the string object into an jSON object that is represented as a string
         localStorage.setItem("leaderboard", JSON.stringify(str))
     }
+    //if leaderboard exists
     else
     {
+        //convert JSON into an object and casts object into a string, and finally splits the string based on commas (commas provided by JSON)
         let info = String(JSON.parse(localStorage.getItem("leaderboard"))).split(",")
 
-        //if name in localstorage is in leaderboard
+        //function that determins if name in localstorage is in leaderboard (so we just update value instead of writing new players multiple times to localStorage)
         if(getNameIndex(info) != -1)
         {
             let data = info[getNameIndex(info)].split(" ")
@@ -277,18 +284,21 @@ let leaderboardManager = function()
         }
         else
         {
+            //add current player information to info string array
             info.push(str)
         }
         
-
+        //store sorted String array (by level) in output
         output = sortLeaderboard(info)
 
+        //converts string array into a JSON string and stores it in leaderboard
+        //(JSON ONLY STORES STRINGS SO JSON IS USED TO OUR ADVANTAGE)
         localStorage.setItem("leaderboard", JSON.stringify(output))
 
-        
     }
 }
 
+//gets index of name from leaderboard. -1 if not found
 let getNameIndex = function(arr)
 {
     let index = -1
@@ -304,6 +314,7 @@ let getNameIndex = function(arr)
     return index
 }
 
+//sorts leaderboard by level. Each element storeed in arr is space seperated (name, level). Ex: ("Player 8")
 let sortLeaderboard = function(arr)
 {
     output = [...arr]
@@ -335,6 +346,7 @@ let sortLeaderboard = function(arr)
 let initLeaderboard = function()
 {
    
+    //used to determine whether the current file is the index.html and not the pregame file
     let path = window.location.pathname;
     let page = path.split("/").pop();
 
@@ -344,8 +356,10 @@ let initLeaderboard = function()
     {
         let leaderboard = document.getElementById("leaderboard") 
         
+        //gets JSON string from the leaderboard key in localStorage and converts it to a string, and finally splits each value by a comma
         let leaderboardData = String(JSON.parse(localStorage.getItem("leaderboard"))).split(",")
 
+        //important to have to prevent from adding new values to old table
         while(leaderboard.rows.length > 1 && leaderboard.rows.length != 0)
             leaderboard.deleteRow(-1)
         
@@ -353,6 +367,7 @@ let initLeaderboard = function()
         for(let i = 1; i < leaderboardData.length + 1; i++)
         { 
 
+            //max values i'll show is 5
             if(i == 5) break;
 
             let row = leaderboard.insertRow(i)
@@ -379,6 +394,7 @@ $(document).ready(function()
     pregameTextInterval = setInterval(pregameRainbowText, 1000)
     gameTextInterval = setInterval(rainbowGameText, 1000)
 
+    //if there's already a leaderboard then initiaize it. 
     if(localStorage.getItem("leaderboard") != null)
         initLeaderboard()
 
@@ -402,7 +418,7 @@ $(document).ready(function()
     $("#start").click(function() 
     {
         //if start button clicked, this function is called
-        setTimeout(begin, 500)
+        setTimeout(begin, 400)
     })
     
     $("#bird").click(function()
