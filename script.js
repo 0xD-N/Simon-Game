@@ -1,7 +1,7 @@
 //controls if instructions show
 let show_instructions = false;
 
-let show_leaderboard = false;
+//let show_leaderboard = false;
 
 //controls the game title text color loop
 let gameTextInterval = null;
@@ -35,7 +35,7 @@ let animals = ["bird", "dog", "lion", "monkey"]
 
 //leaderboard 
 
-let leaderboard = null
+//let leaderboard = null
 
 //generates a random hex color for title
 function getRandomColor() 
@@ -76,6 +76,7 @@ let instructions = function()
     }
 }
 
+/*
 let leaderboard_visibility = function()
 {
     if(show_leaderboard)
@@ -89,6 +90,7 @@ let leaderboard_visibility = function()
         show_instructions = true
     }
 }
+*/
 
 
 //chenges game text to corresponding level
@@ -204,8 +206,8 @@ let logic = function(num)
             clearInterval(gameTextInterval)
             clearInterval(levelSpeedInterval)
             clearInterval(levelInterval)
-            leaderboardManager()
-            initLeaderboard()
+            //leaderboardManager()
+            //initLeaderboard()
             
             //changes game text to game over
             $("#game-text").text("GAME OVER!")
@@ -248,7 +250,7 @@ let logic = function(num)
 }
 
 
-
+/*
 //called when game is over. Manages the order of the leaderboard
 
 let leaderboardManager = function()
@@ -271,6 +273,7 @@ let leaderboardManager = function()
     {
         //convert JSON into an object and casts object into a string, and finally splits the string based on commas (commas provided by JSON)
         let info = String(JSON.parse(localStorage.getItem("leaderboard"))).split(",")
+        
 
         //function that determins if name in localstorage is in leaderboard (so we just update value instead of writing new players multiple times to localStorage)
         if(getNameIndex(info) != -1)
@@ -297,7 +300,9 @@ let leaderboardManager = function()
 
     }
 }
+*/
 
+/*
 //gets index of name from leaderboard. -1 if not found
 let getNameIndex = function(arr)
 {
@@ -313,7 +318,8 @@ let getNameIndex = function(arr)
 
     return index
 }
-
+*/
+/*
 //sorts leaderboard by level. Each element storeed in arr is space seperated (name, level). Ex: ("Player 8")
 let sortLeaderboard = function(arr)
 {
@@ -341,7 +347,8 @@ let sortLeaderboard = function(arr)
 
     return output
 }
-
+*/
+/*
 //going to initialize the leaderboard when document loads
 let initLeaderboard = function()
 {
@@ -360,8 +367,8 @@ let initLeaderboard = function()
         let leaderboardData = String(JSON.parse(localStorage.getItem("leaderboard"))).split(",")
 
         //important to have to prevent from adding new values to old table
-        while(leaderboard.rows.length > 1 && leaderboard.rows.length != 0)
-            leaderboard.deleteRow(-1)
+       while(leaderboard.rows.length > 1 && leaderboard.rows.length != 0)
+           leaderboard.deleteRow(-1)
         
         //start at index 1 since heading is in 0
         for(let i = 1; i < leaderboardData.length + 1; i++)
@@ -387,17 +394,18 @@ let initLeaderboard = function()
     }
     
 }
-
+*/
 //when document loads set interval variables and add events for each image and start button
 $(document).ready(function() 
 {
     pregameTextInterval = setInterval(pregameRainbowText, 1000)
     gameTextInterval = setInterval(rainbowGameText, 1000)
 
+    /*
     //if there's already a leaderboard then initiaize it. 
     if(localStorage.getItem("leaderboard") != null)
         initLeaderboard()
-
+    */
     
     $("#pregame-next").click(function() 
     {
@@ -411,7 +419,7 @@ $(document).ready(function()
         {
             clearInterval(pregameTextInterval)
             localStorage.setItem("name", $("#pregame-input")[0].value)
-            window.location.replace("index.html")
+            window.location.replace("game.html")
         }
     })
 
@@ -491,9 +499,8 @@ $(document).ready(function()
 
     $("#quit").click(function() 
     {
-        window.location.replace("pregame.html")
+        window.location.replace("index.html")
     })
 
     $("img").addClass("unselectable")
 })
-

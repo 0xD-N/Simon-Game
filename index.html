@@ -1,66 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pregame</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="script.js"></script>
-    <title>Simon</title>
-    <link rel="shortcut icon" href="images/title.ico">
+    <link rel="stylesheet" href="styles.css">
+  </head>
 
-</head>
-<body>
-    
-    <div id="game-instructions-div">
-        <button id="game-instructions-button" onclick="instructions()">Instructions</button>
-        <br>
-        <br>
-        <div id="game-instruction-text">Repeat the given sequences for as long as you can. One wrong move and it's <b>GAME OVER!</b></div>
-    </div>
+  <body>
+      <center>
+          <div id="pregame-information">
 
-    <center>
+            <span id="pregame-text">Enter Username</span>
+              
+            <input type="text" id="pregame-input">
+            <small id="pregame-error"></small>
+            <button id="pregame-next">Next</button>
 
-        <div id="game-text">
-            Press Start
-        </div>
-
-        <div id="game-div">
-
-            
-
-            <table id="game-table">
-                <thead>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><img id="bird" src="images/bird.jpg"></td>
-                        <td><img id="dog" src="images/dog.jpg"></td>
-                    </tr>
-                    <tr>
-                        <td><img id="lion" src="images/lion.jpg"></td>
-                        <td><img id="monkey" src="images/monkey.jpg"></td>
-                    </tr>
-                </tbody>
-            </table>
-
-           <button id="start">Start</button>
-        </div>
-
-    </center>
-
-    <table id="leaderboard">
-
-        <tr>
-            <th>Player</th>
-            <th>Score</th>
-        </tr>
-        
-        </tr>
-    </table>
-
-    <button id="quit">X</button>
-
-</body>
+          </div>
+          
+      </center>
+      
+  </body>
 </html>
